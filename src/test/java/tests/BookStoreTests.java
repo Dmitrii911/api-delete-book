@@ -70,18 +70,18 @@ public class BookStoreTests extends TestBase {
 
 
             open("/profile");
-            $(".ReactTable").shouldHave(text("Speaking JavaScript"));
+            $(".ReactTable").shouldHave(text("Git Pocket Guide"));
         });
 
 
         step("Удаление книги из коллекции API", () ->
-            given(loginRequestSpec)
-                    .header("Authorization", "Bearer " + authResponse.getToken())
-                    .when()
-                    .delete("/BookStore/v1/Books")
-                    .then()
-                    .spec(bookCollectionResponseSpec)
-                    .statusCode(204));
+                given(loginRequestSpec)
+                        .header("Authorization", "Bearer " + authResponse.getToken())
+                        .when()
+                        .delete("/BookStore/v1/Books")
+                        .then()
+                        .spec(bookCollectionResponseSpec)
+                        .statusCode(204));
 
         UserResponseModel updatedUserResponse = step("Запрос информации о пользователе", () ->
                 given(loginRequestSpec)
@@ -95,8 +95,8 @@ public class BookStoreTests extends TestBase {
         step("Проверка, что коллекция книг пуста", () -> {
             assertThat(updatedUserResponse.getBooks(), Matchers.empty());
         });
-        }
     }
+}
 
 
 
