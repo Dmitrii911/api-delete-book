@@ -73,10 +73,15 @@ public class BookStoreTests extends TestBase {
             $(".ReactTable").shouldHave(text("Git Pocket Guide"));
         });
 
+        AddBookBodyModel deleteBookData = new AddBookBodyModel(
+                authResponse.getUserId(),
+                List.of(new AddBookBodyModel.BookIsbn("9781449325862")));
+
 
         step("Удаление книги из коллекции API", () ->
                 given(loginRequestSpec)
                         .header("Authorization", "Bearer " + authResponse.getToken())
+                        .body(deleteBookData)
                         .when()
                         .delete("/BookStore/v1/Books")
                         .then()
