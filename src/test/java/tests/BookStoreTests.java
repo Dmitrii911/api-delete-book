@@ -1,5 +1,6 @@
 package tests;
 
+import api.AccountApiSteps;
 import com.codeborne.selenide.Selenide;
 import models.AddBookBodyModel;
 import models.LoginBodyModel;
@@ -26,20 +27,15 @@ import static tests.TestData.USERNAME;
 public class BookStoreTests extends TestBase {
     @Test
     void addBookToCollectionTest() {
+        AccountApiSteps accountApiSteps = new AccountApiSteps();
         ProfilePage profilePage = new ProfilePage();
-        LoginBodyModel authData = new LoginBodyModel(USERNAME, PASSWORD);
 
-        LoginResponseModel authResponse = step("Шаг 1: Авторизация", () ->
-                given(loginRequestSpec)
-                        .body(authData)
-                        .when()
-                        .post("/Account/v1/Login")
-                        .then()
-                        .spec(loginResponseSpec)
-                        .extract().as(LoginResponseModel.class));
+
+        LoginResponseModel authResponse = step("Шаг 1: Авторизация", accountApiSteps::login);
+
 
         step("Шаг 2: Очистка предыдущей коллекции книг", () ->
-                given(bookCollectionRequestSpec)
+                given(baseRequestSpec)
                         .header("Authorization", "Bearer " + authResponse.getToken())
                         .queryParams("UserId", authResponse.getUserId())
                         .when()
@@ -52,22 +48,14 @@ public class BookStoreTests extends TestBase {
                 authResponse.getUserId(),
                 List.of(new AddBookBodyModel.BookIsbn("9781449325862")));
 
-        step("Шаг 3: Добавление новой книги", () ->
-                given(bookCollectionRequestSpec)
-                        .header("Authorization", "Bearer " + authResponse.getToken())
-                        .body(bookData)
-                        .when()
-                        .post("/BookStore/v1/Books")
-                        .then()
-                        .spec(bookCollectionResponseSpec)
-                        .statusCode(201));
+        step("Шаг 3: Добавление новой книги", accountApiSteps::addBookBodyModel);
+
 
         step("Шаг 4: UI-проверка добавленной книги", () -> {
             open("/favicon.ico");
             getWebDriver().manage().addCookie(new Cookie("userID", authResponse.getUserId()));
             getWebDriver().manage().addCookie(new Cookie("expires", authResponse.getExpires()));
             getWebDriver().manage().addCookie(new Cookie("token", authResponse.getToken()));
-
 
             open("/profile");
             $(".ReactTable").shouldHave(text("Git Pocket Guide"));
@@ -79,9 +67,9 @@ public class BookStoreTests extends TestBase {
 
 
         step("Удаление книги из коллекции API", () ->
-                given(loginRequestSpec)
+                given(baseRequestSpec)
                         .header("Authorization", "Bearer " + authResponse.getToken())
-                        .body(deleteBookData)
+                        .queryParam("UserId",authResponse.getUserId())
                         .when()
                         .delete("/BookStore/v1/Books")
                         .then()
@@ -89,12 +77,12 @@ public class BookStoreTests extends TestBase {
                         .statusCode(204));
 
         UserResponseModel updatedUserResponse = step("Запрос информации о пользователе", () ->
-                given(loginRequestSpec)
+                given(baseRequestSpec)
                         .header("Authorization", "Bearer " + authResponse.getToken())
                         .when()
                         .get("/Account/v1/User/" + authResponse.getUserId())
                         .then()
-                        .spec(loginResponseSpec)
+                        .spec(baseResponseSpec)
                         .extract().as(UserResponseModel.class));
 
         step("Проверка, что коллекция книг пуста", () -> {
