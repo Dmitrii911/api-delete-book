@@ -16,11 +16,18 @@ public class ProfilePage {
     @Step("Открыть страницу")
     public ProfilePage openPage() {
         open("/profile");
+
+        return this;
+    }
+
+    @Step("Удалить баннер")
+    public ProfilePage removeAdds() {
         executeJavaScript("$('#fixedban').remove()");
         executeJavaScript("$('footer').remove()");
 
         return this;
     }
+
 
     @Step("Проверить User Name")
     public ProfilePage checkUserName(String login) {
@@ -31,14 +38,14 @@ public class ProfilePage {
     }
 
     @Step("Удалить книгу")
-    public ProfilePage clickOnDeleteBtn(){
+    public ProfilePage clickOnDeleteBtn() {
         deleteButtons.click();
 
         return this;
     }
 
     @Step("Подтвердить удаление книги в модальном окне")
-    public ProfilePage clickOkInModal(){
+    public ProfilePage clickOkInModal() {
         deleteModal.click();
 
         return this;

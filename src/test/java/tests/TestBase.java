@@ -21,17 +21,22 @@ public class TestBase {
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
         Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("browser_version", "127.0");
+        Configuration.browserVersion = System.getProperty("browser_version", "139.0");
         Configuration.browserSize = System.getProperty("windowSize", "1920x1080");
-        Configuration.remote = "https://user1:1234@" + System.getProperty("selenoid_url", "selenoid.autotests.cloud/wd/hub");
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
-                "enableVNC", true,
-                "enableVideo", true,
-                "videoCodec", "libx264",
-                "videoFrameRate", 24
-        ));
-        Configuration.browserCapabilities = capabilities;
+        String selenoidPassword = System.getProperty("selenoid_password");
+        String selenoidUsername = System.getProperty("selenoid_username");
+        if (selenoidPassword != null){
+            Configuration.remote = "https://" + selenoidUsername + ":" + selenoidPassword + "@" + System.getProperty("selenoid_url", "selenoid.autotests.cloud/wd/hub");
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+                    "enableVNC", true,
+                    "enableVideo", true,
+                    "videoCodec", "libx264",
+                    "videoFrameRate", 24
+            ));
+            Configuration.browserCapabilities = capabilities;
+        }
+
     }
 
     @BeforeEach

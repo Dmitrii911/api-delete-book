@@ -10,23 +10,18 @@ import static io.restassured.filter.log.LogDetail.STATUS;
 import static io.restassured.http.ContentType.JSON;
 
 public class SpecsBookStoreTest {
-    public static RequestSpecification loginRequestSpec = with()
+    public static RequestSpecification baseRequestSpec = with()
             .log().uri()
             .log().method()
             .log().body()
             .contentType(JSON);
 
-    public static ResponseSpecification loginResponseSpec = new ResponseSpecBuilder()
+    public static ResponseSpecification baseResponseSpec = new ResponseSpecBuilder()
             .log(STATUS)
             .log(BODY)
             .expectStatusCode(200)
             .build();
 
-    public static RequestSpecification bookCollectionRequestSpec = with()
-            .log().uri()
-            .log().method()
-            .log().body()
-            .contentType(JSON);
 
     public static ResponseSpecification bookCollectionResponseSpec = new ResponseSpecBuilder()
             .log(STATUS)

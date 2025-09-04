@@ -10,8 +10,8 @@ public class LoginResponseModel {
     String password;
     String token;
     String expires;
-    String created_date;
-    @JsonProperty("isActive")
+    @JsonProperty("created_date")
+    String createdDate;
     String isActive;
 
 }

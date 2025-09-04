@@ -1,7 +1,9 @@
 package tests;
 
 import api.AccountApiSteps;
+//import api.AddBookApiSteps;
 import com.codeborne.selenide.Selenide;
+import io.restassured.response.Response;
 import models.AddBookBodyModel;
 import models.LoginBodyModel;
 import models.LoginResponseModel;
@@ -48,8 +50,15 @@ public class BookStoreTests extends TestBase {
                 authResponse.getUserId(),
                 List.of(new AddBookBodyModel.BookIsbn("9781449325862")));
 
-        step("Шаг 3: Добавление новой книги", accountApiSteps::addBookBodyModel);
-
+        step("Шаг 3: Добавление новой книги", () ->
+                given(baseRequestSpec)
+                        .header("Authorization", "Bearer " + authResponse.getToken())
+                        .body(bookData)
+                        .when()
+                        .post("/BookStore/v1/Books")
+                        .then()
+                        .spec(bookCollectionResponseSpec)
+                        .statusCode(201));
 
         step("Шаг 4: UI-проверка добавленной книги", () -> {
             open("/favicon.ico");
@@ -57,7 +66,7 @@ public class BookStoreTests extends TestBase {
             getWebDriver().manage().addCookie(new Cookie("expires", authResponse.getExpires()));
             getWebDriver().manage().addCookie(new Cookie("token", authResponse.getToken()));
 
-            open("/profile");
+            profilePage.openPage();
             $(".ReactTable").shouldHave(text("Git Pocket Guide"));
         });
 
