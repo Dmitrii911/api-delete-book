@@ -14,10 +14,9 @@ public class ProfilePage {
 
 
     @Step("Открыть страницу")
-    public ProfilePage openPage() {
+    public static void openPage() {
         open("/profile");
 
-        return this;
     }
 
     @Step("Удалить баннер")

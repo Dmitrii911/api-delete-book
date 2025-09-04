@@ -25,7 +25,7 @@ public class TestBase {
         Configuration.browserSize = System.getProperty("windowSize", "1920x1080");
         String selenoidPassword = System.getProperty("selenoid_password");
         String selenoidUsername = System.getProperty("selenoid_username");
-        if (selenoidPassword != null){
+        if (selenoidPassword != null) {
             Configuration.remote = "https://" + selenoidUsername + ":" + selenoidPassword + "@" + System.getProperty("selenoid_url", "selenoid.autotests.cloud/wd/hub");
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability("selenoid:options", Map.<String, Object>of(
