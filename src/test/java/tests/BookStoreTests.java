@@ -4,21 +4,27 @@ import api.AccountApiSteps;
 import api.BookStoreApiSteps;
 import api.CheckingBook;
 import api.UserApi;
+import helpers.AuthHelper;
 import models.AddBookBodyModel;
 import models.LoginResponseModel;
 import models.UserResponseModel;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import pages.ProfilePage;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.confirm;
 import static io.qameta.allure.Allure.step;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static tests.TestData.USERNAME;
 
 public class BookStoreTests extends TestBase {
     @Test
     void addBookToCollectionTest() {
         AccountApiSteps accountApiSteps = new AccountApiSteps();
+        AuthHelper authHelper = new AuthHelper();
+        ProfilePage profilePage = new ProfilePage();
 
         LoginResponseModel authResponse = step("Шаг 1: Авторизация", accountApiSteps::login);
 
@@ -32,11 +38,19 @@ public class BookStoreTests extends TestBase {
         step("Шаг 3: Добавление новой книги", () ->
                 BookStoreApiSteps.addBook(bookData, authResponse.getToken()));
 
-        step("Шаг 4: UI-проверка добавленной книги", () ->
-                CheckingBook.checkBook(authResponse));
+        step("Шаг 4: Авторизация через cookies", () ->
+                authHelper.setAuthCookies(authResponse)
+        );
 
-        step("Удаление книги из коллекции API", () ->
-                BookStoreApiSteps.deleteBook(authResponse.getToken(), authResponse.getUserId()));
+        step("Шаг 5: Удаление книги из коллекции через UI", () -> {
+            ProfilePage.openPage()
+                    .removeAdds()
+                    .checkUserName(USERNAME)
+                    .clickOnDeleteBtn()
+                    .clickOkInModal();
+            confirm();
+            profilePage.checkListOfBooksIsEmpty();
+        });
 
         UserResponseModel updatedUserResponse = step("Запрос информации о пользователе", () ->
                 UserApi.userInfo(authResponse.getToken(), authResponse.getUserId()));

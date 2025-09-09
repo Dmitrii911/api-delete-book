@@ -14,8 +14,9 @@ public class ProfilePage {
 
 
     @Step("Открыть страницу")
-    public static void openPage() {
+    public static ProfilePage openPage() {
         open("/profile");
+        return new ProfilePage();
 
     }
 
