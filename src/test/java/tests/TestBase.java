@@ -21,7 +21,7 @@ public class TestBase {
         RestAssured.baseURI = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
         Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("browser_version", "139.0");
+        Configuration.browserVersion = System.getProperty("browser_version", "127.0");
         Configuration.browserSize = System.getProperty("windowSize", "1920x1080");
         String selenoidPassword = System.getProperty("selenoid_password");
         String selenoidUsername = System.getProperty("selenoid_username");
