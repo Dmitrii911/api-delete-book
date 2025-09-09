@@ -17,7 +17,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.confirm;
 import static io.qameta.allure.Allure.step;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static tests.TestData.USERNAME;
+import static tests.TestData.userName;
 
 public class BookStoreTests extends TestBase {
     @Test
@@ -45,7 +45,7 @@ public class BookStoreTests extends TestBase {
         step("Шаг 5: Удаление книги из коллекции через UI", () -> {
             ProfilePage.openPage()
                     .removeAdds()
-                    .checkUserName(USERNAME)
+                    .checkUserName(userName)
                     .clickOnDeleteBtn()
                     .clickOkInModal();
             confirm();
