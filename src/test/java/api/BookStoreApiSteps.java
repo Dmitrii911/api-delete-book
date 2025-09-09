@@ -33,16 +33,4 @@ public class BookStoreApiSteps {
                 .statusCode(204);
         return null;
     }
-
-    public static Response deleteBook(String token, String userId) {
-        given(baseRequestSpec)
-                .header("Authorization", "Bearer " + token)
-                .queryParam("UserId", userId)
-                .when()
-                .delete("/BookStore/v1/Books")
-                .then()
-                .spec(bookCollectionResponseSpec)
-                .statusCode(204);
-        return null;
-    }
 }
