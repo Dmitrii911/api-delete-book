@@ -2,7 +2,6 @@ package tests;
 
 import api.AccountApiSteps;
 import api.BookStoreApiSteps;
-import api.CheckingBook;
 import api.UserApi;
 import helpers.AuthHelper;
 import models.AddBookBodyModel;
@@ -17,7 +16,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.confirm;
 import static io.qameta.allure.Allure.step;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static tests.TestData.userName;
+import static tests.TestData.username;
 
 public class BookStoreTests extends TestBase {
     @Test
@@ -45,7 +44,7 @@ public class BookStoreTests extends TestBase {
         step("Шаг 5: Удаление книги из коллекции через UI", () -> {
             ProfilePage.openPage()
                     .removeAdds()
-                    .checkUserName(userName)
+                    .checkUserName(username)
                     .clickOnDeleteBtn()
                     .clickOkInModal();
             confirm();
