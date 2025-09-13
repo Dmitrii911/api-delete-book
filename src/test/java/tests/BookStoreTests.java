@@ -41,7 +41,7 @@ public class BookStoreTests extends TestBase {
                 authHelper.setAuthCookies(authResponse)
         );
 
-        step("Шаг 5: Удаление книги из коллекции через UI", () -> {
+        step("Шаг 5:Удаление книги из коллекции через UI", () -> {
             ProfilePage.openPage()
                     .removeAdds()
                     .checkUserName(username)
